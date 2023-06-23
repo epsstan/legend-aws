@@ -21,4 +21,4 @@ jobs:
 
       - name: Copy CFN Template to S3
         run: |
-          aws s3 cp dist/cfn.yaml s3://legend-aws-cfn/template.yaml
+          aws s3 cp dist/cfn.yaml s3://legend-aws-cfn/template.yaml --acl public-read
