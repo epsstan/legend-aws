@@ -1,7 +1,11 @@
 package org.finos.legend.stack;
 
 import software.constructs.Construct;
+
+import java.util.Map;
+
 import software.amazon.awscdk.CfnOutput;
+import software.amazon.awscdk.CfnParameter;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.ec2.Vpc;
@@ -17,6 +21,8 @@ public class LegendAwsStack extends Stack {
 
     public LegendAwsStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
+
+        CfnParameter parameter = CfnParameter.Builder.create(this, "LEGEND_OMNIBUS_REMOTE_GITLAB_PAT").type("String").build();
 
         Vpc vpc = Vpc.Builder
             .create(this, "LegendAwsVpc")
@@ -37,6 +43,7 @@ public class LegendAwsStack extends Stack {
                 ApplicationLoadBalancedTaskImageOptions
                     .builder()
                     .image(ContainerImage.fromRegistry("finos/legend-omnibus:latest-slim"))
+                    .environment(Map.of("LEGEND_OMNIBUS_NGINX_PORT", "80", "LEGEND_OMNIBUS_REMOTE_GITLAB_PAT", parameter.getValueAsString()))
                     .build())
             .memoryLimitMiB(4096)
             .publicLoadBalancer(true)
