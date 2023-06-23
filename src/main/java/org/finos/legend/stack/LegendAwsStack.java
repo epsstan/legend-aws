@@ -53,6 +53,6 @@ public class LegendAwsStack extends Stack {
             .publicLoadBalancer(true)
             .build();
 
-        CfnOutput.Builder.create(this, "LegendAwsServiceUrl").value(service.getLoadBalancer().getLoadBalancerDnsName()).build();
+        CfnOutput.Builder.create(this, "StudioUrl").value(service.getLoadBalancer().getLoadBalancerDnsName() + "/studio").build();
     }
 }
