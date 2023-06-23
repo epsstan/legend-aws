@@ -28,6 +28,7 @@ jobs:
 
       - name: CDK Synth
         run: |
+          mkdir dist
           npm install aws-cdk
           cdk synth > dist/cfn.yaml
 
