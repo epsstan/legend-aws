@@ -1,5 +1,6 @@
 package org.finos.legend.stack;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import software.amazon.awscdk.CfnOutput;
@@ -33,6 +34,10 @@ public class LegendAwsStack extends Stack {
             .vpc(vpc)
             .build();
 
+        Map<String, String> environment = new HashMap<>();
+        environment.put("LEGEND_OMNIBUS_NGINX_PORT", "80");
+        environment.put("LEGEND_OMNIBUS_REMOTE_GITLAB_PAT", parameter.getValueAsString());
+
         ApplicationLoadBalancedFargateService service = ApplicationLoadBalancedFargateService.Builder
             .create(this, "LegendAwsService")
             .cluster(cluster)
@@ -42,7 +47,7 @@ public class LegendAwsStack extends Stack {
                 ApplicationLoadBalancedTaskImageOptions
                     .builder()
                     .image(ContainerImage.fromRegistry("finos/legend-omnibus:latest-slim"))
-                    .environment(Map.of("LEGEND_OMNIBUS_NGINX_PORT", "80", "LEGEND_OMNIBUS_REMOTE_GITLAB_PAT", parameter.getValueAsString()))
+                    .environment(environment)
                     .build())
             .memoryLimitMiB(4096)
             .publicLoadBalancer(true)
