@@ -12,7 +12,6 @@ public class LegendAwsApp {
 
         new LegendAwsStack(app, "LegendAwsStack", StackProps
             .builder()
-            .stackName("LegendAws")
             .synthesizer(new BootstraplessSynthesizer())
             .build()
         );
