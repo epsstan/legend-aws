@@ -3,8 +3,7 @@ package org.finos.legend;
 import org.finos.legend.stack.LegendAwsStack;
 
 import software.amazon.awscdk.App;
-import software.amazon.awscdk.DefaultStackSynthesizer;
-import software.amazon.awscdk.DefaultStackSynthesizerProps;
+import software.amazon.awscdk.BootstraplessSynthesizer;
 import software.amazon.awscdk.StackProps;
 
 public class LegendAwsApp {
@@ -13,13 +12,8 @@ public class LegendAwsApp {
 
         new LegendAwsStack(app, "LegendAwsStack", StackProps
             .builder()
-            .stackName("Legend")
-            .synthesizer(new DefaultStackSynthesizer(
-                DefaultStackSynthesizerProps
-                    .builder()
-                    .generateBootstrapVersionRule(false)
-                    .build()
-            ))
+            .stackName("LegendAws")
+            .synthesizer(new BootstraplessSynthesizer())
             .build()
         );
 

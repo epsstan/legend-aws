@@ -27,6 +27,7 @@ public class LegendAwsStack extends Stack {
         Vpc vpc = Vpc.Builder
             .create(this, "LegendAwsVpc")
             .maxAzs(3)
+            .restrictDefaultSecurityGroup(false)
             .build();
 
         Cluster cluster = Cluster.Builder
