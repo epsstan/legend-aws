@@ -13,6 +13,7 @@ public class LegendAwsApp {
 
         new LegendAwsStack(app, "LegendAwsStack", StackProps
             .builder()
+            .stackName("Legend")
             .synthesizer(new DefaultStackSynthesizer(
                 DefaultStackSynthesizerProps
                     .builder()
