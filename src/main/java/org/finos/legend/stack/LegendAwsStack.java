@@ -36,6 +36,7 @@ public class LegendAwsStack extends Stack {
                 super(scope, id, props);
 
                 CfnParameter cognitoDomainPrefix = CfnParameter.Builder.create(this, "CognitoDomainPrefix")
+                                .description("A globally unique value for the cognito domain name prefix. Example: legend-test-123")
                                 .type("String")
                                 .build();
 
