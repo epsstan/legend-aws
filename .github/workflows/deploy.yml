@@ -30,8 +30,7 @@ jobs:
         run: |
           mkdir dist
           npm install -g aws-cdk
-          cdk synth BootstrapStack > dist/bootstrap.yaml
-          cdk synth LegendAwsStack > dist/legend.yaml
+          cdk synth > dist/cfn.yaml
 
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v2
@@ -42,5 +41,4 @@ jobs:
 
       - name: Copy CFN Template to S3
         run: |
-          aws s3 cp dist/bootstrap.yaml s3://legend-aws-cfn/bootstrap.yaml --acl public-read
-          aws s3 cp dist/legend.yaml s3://legend-aws-cfn/legend.yaml --acl public-read
+          aws s3 cp dist/cfn.yaml s3://legend-aws-cfn/template.yaml --acl public-read

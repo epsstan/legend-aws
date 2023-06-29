@@ -44,12 +44,7 @@ public class LegendAwsStack extends Stack {
                                 .type("String")
                                 .build();
 
-                CfnParameter cognitoUsername = CfnParameter.Builder.create(this, "CognitoUsername")
-                                .description("The username of the default user")
-                                .type("String")
-                                .build();
-
-                CfnParameter cognitoPassword = CfnParameter.Builder.create(this, "CognitoPassword")
+                CfnParameter adminPassword = CfnParameter.Builder.create(this, "AdminPassword")
                                 .description("The password of the default user (Must be between 6 and 99 characters)")
                                 .type("String")
                                 .build();
@@ -98,8 +93,8 @@ public class LegendAwsStack extends Stack {
 
                 CognitoUser.Builder.create(this, "LegendAwsCognitoUser")
                                 .userPool(userPool)
-                                .username(cognitoUsername.getValueAsString())
-                                .password(cognitoPassword.getValueAsString())
+                                .username("admin")
+                                .password(adminPassword.getValueAsString())
                                 .build();
 
                 Map<String, String> environment = new HashMap<>();
