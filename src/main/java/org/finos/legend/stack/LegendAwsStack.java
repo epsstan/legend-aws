@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.finos.legend.construct.CognitoUser;
+
 import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.CfnParameter;
+import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.apigatewayv2.CfnIntegration;
@@ -17,6 +20,7 @@ import software.amazon.awscdk.services.cognito.AuthFlow;
 import software.amazon.awscdk.services.cognito.CognitoDomainOptions;
 import software.amazon.awscdk.services.cognito.OAuthFlows;
 import software.amazon.awscdk.services.cognito.OAuthSettings;
+import software.amazon.awscdk.services.cognito.PasswordPolicy;
 import software.amazon.awscdk.services.cognito.UserPool;
 import software.amazon.awscdk.services.cognito.UserPoolClient;
 import software.amazon.awscdk.services.cognito.UserPoolDomain;
@@ -40,6 +44,16 @@ public class LegendAwsStack extends Stack {
                                 .type("String")
                                 .build();
 
+                CfnParameter cognitoUsername = CfnParameter.Builder.create(this, "CognitoUsername")
+                                .description("The username of the default user")
+                                .type("String")
+                                .build();
+
+                CfnParameter cognitoPassword = CfnParameter.Builder.create(this, "CognitoPassword")
+                                .description("The password of the default user (Must be between 6 and 99 characters)")
+                                .type("String")
+                                .build();
+
                 Vpc vpc = Vpc.Builder
                                 .create(this, "LegendAwsVpc")
                                 .maxAzs(3)
@@ -56,7 +70,13 @@ public class LegendAwsStack extends Stack {
                                                 .collect(Collectors.toList()))
                                 .build();
 
-                UserPool userPool = new UserPool(this, "LegendAwsUserPool");
+                UserPool userPool = UserPool.Builder.create(this, "LegendAwsUserPool")
+                                .passwordPolicy(
+                                                PasswordPolicy.builder().minLength(6).requireDigits(false)
+                                                                .requireLowercase(false).requireSymbols(false)
+                                                                .requireUppercase(false).build())
+                                .removalPolicy(RemovalPolicy.DESTROY)
+                                .build();
 
                 UserPoolDomain.Builder.create(this, "LegendAwsUserPoolDomain")
                                 .userPool(userPool)
@@ -74,6 +94,12 @@ public class LegendAwsStack extends Stack {
                                 .oAuth(OAuthSettings.builder()
                                                 .callbackUrls(List.of(httpApi.getUrl() + "studio/"))
                                                 .flows(OAuthFlows.builder().implicitCodeGrant(true).build()).build())
+                                .build();
+
+                CognitoUser.Builder.create(this, "LegendAwsCognitoUser")
+                                .userPool(userPool)
+                                .username(cognitoUsername.getValueAsString())
+                                .password(cognitoPassword.getValueAsString())
                                 .build();
 
                 Map<String, String> environment = new HashMap<>();
