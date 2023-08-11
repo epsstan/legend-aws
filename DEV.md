@@ -13,3 +13,6 @@ cdk deploy
 *Note: First change LegendAwsApp to use LegendAwsStackWithAuth*
 
 cdk deploy --parameters CognitoDomainPrefix=**{change-this}** --parameters AdminPassword=**{change-this}**
+
+## Cleanup
+cdk destroy
