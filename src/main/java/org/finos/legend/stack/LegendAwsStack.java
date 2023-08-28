@@ -60,7 +60,7 @@ public class LegendAwsStack extends Stack {
                                                 ApplicationLoadBalancedTaskImageOptions
                                                                 .builder()
                                                                 .image(ContainerImage.fromRegistry(
-                                                                                "dockerizeduser/legend-box2:latest"))
+                                                                                "legendfsdemo/legend-omnibus:latest-ghc"))
                                                                 .environment(environment)
                                                                 .build())
                                 .memoryLimitMiB(4096)
